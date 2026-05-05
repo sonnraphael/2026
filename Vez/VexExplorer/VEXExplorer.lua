@@ -9335,6 +9335,21 @@ end
 
 Explorer:Create()
 
+    for _, v in pairs(Explorer.UI:GetDescendants()) do
+        if v:IsA("GuiObject") then
+            v.Size = UDim2.new(
+                v.Size.X.Scale,
+                v.Size.X.Offset * scaleFactor,
+                v.Size.Y.Scale,
+                v.Size.Y.Offset * scaleFactor
+            )
+        end
+        if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+            v.TextSize = v.TextSize * scaleFactor
+        end
+    end
+end
+
 local hld = 0.5
 local hldg = false
 local hls = 0
