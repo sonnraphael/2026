@@ -2430,7 +2430,7 @@ function VexUI:CreateWindow(Config)
     local Parent = Config.Parent
     local Title = Config.Title or "Window"
     local Brand = Config.Brand
-    local Size = Config.Size or UDim2.fromOffset(380, 480)
+    local Size = Config.Size or UDim2.fromOffset(180, 280)
     local Position = Config.Position
         or UDim2.new(0.5, -Size.X.Offset / 2, 0.5, -Size.Y.Offset / 2)
 
