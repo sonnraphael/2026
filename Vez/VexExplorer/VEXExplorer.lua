@@ -2,6 +2,9 @@ print("loadstring:", loadstring)
 print("gethui:", gethui)
 print("request:", request)
 print("appendfile:", appendfile)
+print("Explorer.UI:", Explorer.UI)
+print("Services:", Services)
+print("UIS:", UIS)
 
 getgenv().VexExecutedCheck = false
 
@@ -9338,7 +9341,7 @@ Explorer:Create()
     local UIS = Services.UserInputService
 local ismb = UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled
 
-local scalef = ismb and 0.75 or 1
+local scalef = ismb and 0.5 or 1
 
 task.spawn(function()
     repeat task.wait() until Explorer.UI
