@@ -9335,20 +9335,28 @@ end
 
 Explorer:Create()
 
+    local UIS = Services.UserInputService
+local ismb = UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled
+
+local scalef = ismb and 0.75 or 1
+
+task.spawn(function()
+    repeat task.wait() until Explorer.UI
+
     for _, v in pairs(Explorer.UI:GetDescendants()) do
         if v:IsA("GuiObject") then
             v.Size = UDim2.new(
                 v.Size.X.Scale,
-                v.Size.X.Offset * scaleFactor,
+                v.Size.X.Offset * scalef,
                 v.Size.Y.Scale,
-                v.Size.Y.Offset * scaleFactor
+                v.Size.Y.Offset * scalef
             )
         end
         if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-            v.TextSize = v.TextSize * scaleFactor
+            v.TextSize = v.TextSize * scalef
         end
     end
-end
+end)
 
 local hld = 0.5
 local hldg = false
