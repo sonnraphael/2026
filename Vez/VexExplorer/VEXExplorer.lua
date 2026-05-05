@@ -9330,22 +9330,41 @@ end
 
 Explorer:Create()
 
+local hld = 0.5
+local hldg = false
+local hls = 0
+local sps = nil
+local mth = 10
+
 Track(Services.UserInputService.InputBegan:Connect(function(Input, GameProcessed)
+    if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+        Explorer.RightClick = true
+    end
+
+    if Input.UserInputType == Enum.UserInputType.Touch then
+        hldg = true
+        hls = tick()
+        sps = Input.Position
+
+        task.delay(hld, function()
+            if hldg and (tick() - hls) >= hld then
+                Explorer.RightClick = true
+            end
+        end)
+    end
+
     if Input.KeyCode == Enum.KeyCode.LeftControl
-        or Input.KeyCode == Enum.KeyCode.RightControl
-    then
+        or Input.KeyCode == Enum.KeyCode.RightControl then
         Explorer.CtrlHeld = true
     end
 
     if Input.KeyCode == Enum.KeyCode.LeftShift
-        or Input.KeyCode == Enum.KeyCode.RightShift
-    then
+        or Input.KeyCode == Enum.KeyCode.RightShift then
         Explorer.ShiftHeld = true
     end
 
     if Input.KeyCode == Enum.KeyCode.Escape and Explorer.ReparentMode then
         Explorer:CancelReparent()
-
         return
     end
 
@@ -9370,17 +9389,34 @@ Track(Services.UserInputService.InputBegan:Connect(function(Input, GameProcessed
     Explorer:SetWindowsVisible(Explorer.WindowVisible)
 end))
 
+Track(Services.UserInputService.InputChanged:Connect(function(Input)
+    if Input.UserInputType == Enum.UserInputType.Touch and sps then
+        local delta = (Input.Position - sps).Magnitude
+        if delta > mth then
+            hldg = false
+        end
+    end
+end))
+
 Track(Services.UserInputService.InputEnded:Connect(function(Input)
     if Input.KeyCode == Enum.KeyCode.LeftControl
-        or Input.KeyCode == Enum.KeyCode.RightControl
-    then
+        or Input.KeyCode == Enum.KeyCode.RightControl then
         Explorer.CtrlHeld = false
     end
 
     if Input.KeyCode == Enum.KeyCode.LeftShift
-        or Input.KeyCode == Enum.KeyCode.RightShift
-    then
+        or Input.KeyCode == Enum.KeyCode.RightShift then
         Explorer.ShiftHeld = false
+    end
+
+    if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+        Explorer.RightClick = false
+    end
+
+    if Input.UserInputType == Enum.UserInputType.Touch then
+        hldg = false
+        Explorer.RightClick = false
+        sps = nil
     end
 end))
 
