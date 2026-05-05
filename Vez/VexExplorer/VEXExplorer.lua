@@ -1,3 +1,8 @@
+print("loadstring:", loadstring)
+print("gethui:", gethui)
+print("request:", request)
+print("appendfile:", appendfile)
+
 getgenv().VexExecutedCheck = false
 
 task.wait(0.2)
