@@ -9340,6 +9340,7 @@ local hldg = false
 local hls = 0
 local sps = nil
 local mth = 10
+local htrg = false
 
 Track(Services.UserInputService.InputBegan:Connect(function(Input, GameProcessed)
     if Input.UserInputType == Enum.UserInputType.MouseButton2 then
@@ -9348,12 +9349,19 @@ Track(Services.UserInputService.InputBegan:Connect(function(Input, GameProcessed
 
     if Input.UserInputType == Enum.UserInputType.Touch then
         hldg = true
+        htrg = false
         hls = tick()
         sps = Input.Position
 
         task.delay(hld, function()
-            if hldg and (tick() - hls) >= hld then
-                Explorer.RightClick = true
+            if hldg and not htrg then
+                if (Input.Position - sps).Magnitude <= mth then
+                    htrg = true
+                    Explorer.RightClick = true
+                    if Explorer.OpenContextMenu then
+                        Explorer:OpenContextMenu(Input.Position)
+                    end
+                end
             end
         end)
     end
@@ -9395,7 +9403,7 @@ Track(Services.UserInputService.InputBegan:Connect(function(Input, GameProcessed
 end))
 
 Track(Services.UserInputService.InputChanged:Connect(function(Input)
-    if Input.UserInputType == Enum.UserInputType.Touch and sps then
+    if Input.UserInputType == Enum.UserInputType.Touch and sps and hldg then
         local delta = (Input.Position - sps).Magnitude
         if delta > mth then
             hldg = false
@@ -9403,6 +9411,29 @@ Track(Services.UserInputService.InputChanged:Connect(function(Input)
     end
 end))
 
+Track(Services.UserInputService.InputEnded:Connect(function(Input)
+    if Input.KeyCode == Enum.KeyCode.LeftControl
+        or Input.KeyCode == Enum.KeyCode.RightControl then
+        Explorer.CtrlHeld = false
+    end
+
+    if Input.KeyCode == Enum.KeyCode.LeftShift
+        or Input.KeyCode == Enum.KeyCode.RightShift then
+        Explorer.ShiftHeld = false
+    end
+
+    if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+        Explorer.RightClick = false
+    end
+
+    if Input.UserInputType == Enum.UserInputType.Touch then
+        hldg = false
+        sps = nil
+        task.delay(0.1, function()
+            Explorer.RightClick = false
+        end)
+    end
+end))
 Track(Services.UserInputService.InputEnded:Connect(function(Input)
     if Input.KeyCode == Enum.KeyCode.LeftControl
         or Input.KeyCode == Enum.KeyCode.RightControl then
