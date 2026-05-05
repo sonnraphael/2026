@@ -1,11 +1,3 @@
-print("loadstring:", loadstring)
-print("gethui:", gethui)
-print("request:", request)
-print("appendfile:", appendfile)
-print("Explorer.UI:", Explorer.UI)
-print("Services:", Services)
-print("UIS:", UIS)
-
 getgenv().VexExecutedCheck = false
 
 task.wait(0.2)
@@ -9338,34 +9330,6 @@ end
 
 Explorer:Create()
 
-local uiser = game:GetService("UserInputService")
-local ismo = uiser.TouchEnabled and not uiser.KeyboardEnabled and not uiser.MouseEnabled
-local scafac = ismo and 0.5 or 1 
-task.spawn(function()
-local gui
-    repeat
-        for _, v in pairs(game:GetDescendants()) do
-            if v:IsA("ScreenGui") and v.Name:lower():find("explorer") then
-                gui = v
-                break
-            end
-        end
-        task.wait()
-    until gui
-    for _, v in pairs(gui:GetDescendants()) do
-        if v:IsA("GuiObject") then
-            v.Size = UDim2.new(
-                v.Size.X.Scale,
-                v.Size.X.Offset * scafac,
-                v.Size.Y.Scale,
-                v.Size.Y.Offset * scafac)
-        end
-        if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-            v.TextSize = v.TextSize * scafac
-        end
-    end
-end)
-    
 local hld = 0.5
 local hldg = false
 local hls = 0
