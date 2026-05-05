@@ -9338,29 +9338,34 @@ end
 
 Explorer:Create()
 
-    local UIS = Services.UserInputService
-local ismb = UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled
-
-local scalef = ismb and 0.5 or 1
-
+local uiser = game:GetService("UserInputService")
+local ismo = uiser.TouchEnabled and not uiser.KeyboardEnabled and not uiser.MouseEnabled
+local scafac = ismo and 0.5 or 1 
 task.spawn(function()
-    repeat task.wait() until Explorer.UI
-
-    for _, v in pairs(Explorer.UI:GetDescendants()) do
+local gui
+    repeat
+        for _, v in pairs(game:GetDescendants()) do
+            if v:IsA("ScreenGui") and v.Name:lower():find("explorer") then
+                gui = v
+                break
+            end
+        end
+        task.wait()
+    until gui
+    for _, v in pairs(gui:GetDescendants()) do
         if v:IsA("GuiObject") then
             v.Size = UDim2.new(
                 v.Size.X.Scale,
-                v.Size.X.Offset * scalef,
+                v.Size.X.Offset * scafac,
                 v.Size.Y.Scale,
-                v.Size.Y.Offset * scalef
-            )
+                v.Size.Y.Offset * scafac)
         end
         if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-            v.TextSize = v.TextSize * scalef
+            v.TextSize = v.TextSize * scafac
         end
     end
 end)
-
+    
 local hld = 0.5
 local hldg = false
 local hls = 0
